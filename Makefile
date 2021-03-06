@@ -2,9 +2,28 @@
 # Make the file needed for chrome web store... just type "make"
 #
 
+TIME=$(shell date +%s)
+export TIME
+
 FILES = manifest.json main.html background.js chain.js code.js css font/ img/ libs/
+export FILES
+
+ifeq ($(version),)
 VERSION = `python2 -c "import json; print(json.load(open('manifest.json'))['version'])"`
+export VERSION
+else
+VERSION = `python$(version) -c "import json; print(json.load(open('manifest.json'))['version'])"`
+export VERSION
+endif
+
 TARGET = opendime-extension-$(VERSION).zip
+export TARGET
+
+help:
+	@echo Select python version
+	@echo Example:
+	@echo version=2.7 make zip
+
 
 zip:
 	-rm -f $(TARGET)
